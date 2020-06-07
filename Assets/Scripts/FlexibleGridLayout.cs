@@ -18,11 +18,15 @@ namespace FeelGoodOpgUtils
 		public int Rows;
 		public int Columns;
 		public Vector2 CellSize;
+		private Vector2 CalculatedCellSize;
 
 		public Vector2 Spacing;
 
 		public bool FitX;
 		public bool FitY;
+
+		public bool FixedOrFitX;
+		public bool FixedOrFitY;
 
 		public bool StretchX;
 		public bool StretchY;
@@ -60,8 +64,12 @@ namespace FeelGoodOpgUtils
 			float cellWidth = (parentWidth / Columns) - ((Columns - 1) * Spacing.x / Columns) - (padding.left / Columns) - (padding.right / Columns);
 			float cellHeight = (parentHeight / Rows) - ((Rows - 1) * Spacing.y / Rows) - (padding.top / Rows) - (padding.bottom / Rows);
 
-			CellSize.x = FitX ? cellWidth : CellSize.x;
-			CellSize.y = FitY ? cellHeight : CellSize.y;
+			CalculatedCellSize.x = FitX
+				? cellWidth
+				: (FixedOrFitX && cellWidth < CellSize.x ? cellWidth : CellSize.x);
+			CalculatedCellSize.y = FitY
+				? cellHeight
+				: (FixedOrFitY && cellHeight < CellSize.y ? cellHeight : CellSize.y);
 
 			int columnCount = 0;
 			int rowCount = 0;
@@ -73,18 +81,18 @@ namespace FeelGoodOpgUtils
 
 				RectTransform item = rectChildren[i];
 
-				float xPos = (CellSize.x * columnCount) + (Spacing.x * columnCount) + padding.left;
-				float yPos = (CellSize.y * rowCount) + (Spacing.y * rowCount) + padding.top;
+				float xPos = (CalculatedCellSize.x * columnCount) + (Spacing.x * columnCount) + padding.left;
+				float yPos = (CalculatedCellSize.y * rowCount) + (Spacing.y * rowCount) + padding.top;
 
-				SetChildAlongAxis(item, 0, xPos, CellSize.x);
-				SetChildAlongAxis(item, 1, yPos, CellSize.y);
+				SetChildAlongAxis(item, 0, xPos, CalculatedCellSize.x);
+				SetChildAlongAxis(item, 1, yPos, CalculatedCellSize.y);
 			}
 
 			if (StretchX == true || StretchY == true)
 			{
 				rectTransform.sizeDelta = new Vector2(
-					StretchX ? (columnCount + 1) * (CellSize.x + Spacing.x) + padding.left + padding.right : rectTransform.sizeDelta.x,
-					StretchY ? (rowCount + 1) * (CellSize.y + Spacing.y) + padding.top + padding.bottom : rectTransform.sizeDelta.y);
+					StretchX ? (columnCount + 1) * (CalculatedCellSize.x + Spacing.x) + padding.left + padding.right : rectTransform.sizeDelta.x,
+					StretchY ? (rowCount + 1) * (CalculatedCellSize.y + Spacing.y) + padding.top + padding.bottom : rectTransform.sizeDelta.y);
 			}
 		}
 
