@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
 
@@ -48,10 +49,15 @@ namespace FeelGoodOpgUtils
 			}
 		}
 
-		public static string[] GetAllFilesInFolder(string folderName)
+		public static string[] GetAllFilesInFolder(string folderName, bool includeExtensions = false)
 		{
 			string path = Path.Combine(Application.persistentDataPath, folderName);
-			return Directory.GetFiles(path);
+			string[] files = Directory.GetFiles(path);
+
+			if (includeExtensions == true)
+				return files.Select(f => Path.GetFileName(f)).ToArray();
+			else
+				return files.Select(f => Path.GetFileNameWithoutExtension(f)).ToArray();
 		}
 
 		public static bool FileExists(string fileName, string path, string extension)
