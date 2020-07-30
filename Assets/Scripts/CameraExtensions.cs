@@ -15,5 +15,18 @@ namespace FeelGoodOpgUtils
 		{
 			return camera.pixelRect.Contains(Input.mousePosition) == true;
 		}
+
+		public static bool GetMousePositionOnPlane(this Camera camera, Vector3 position, out Vector3 positionOnPlane)
+		{
+			positionOnPlane = Vector3.zero;
+			Plane plane = new Plane(Vector3.up, position);
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if (plane.Raycast(ray, out float entryPoint) == true)
+			{
+				positionOnPlane = ray.GetPoint(entryPoint);
+				return true;
+			}
+			return false;
+		}
 	}
 }
