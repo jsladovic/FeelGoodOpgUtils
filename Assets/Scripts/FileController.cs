@@ -42,10 +42,7 @@ namespace FeelGoodOpgUtils
 			{
 				string[] nameSplit = fileName.Split('\\');
 				string newPath = Path.Combine(path, nameSplit[nameSplit.Length - 1]);
-				if (File.Exists(newPath) == false)
-				{
-					File.Copy(fileName, newPath);
-				}
+				File.Copy(fileName, newPath, true);
 			}
 		}
 
