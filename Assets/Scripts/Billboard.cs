@@ -17,7 +17,7 @@ namespace FeelGoodOpgUtils
 
 		private void Update()
 		{
-			transform.rotation = CameraTransform.rotation * OriginalRotation;
+			transform.LookAt(CameraTransform);
 		}
 	}
 }
