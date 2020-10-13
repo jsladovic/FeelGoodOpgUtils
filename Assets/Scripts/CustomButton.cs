@@ -43,7 +43,7 @@ namespace FeelGoodOpgUtils
 		{
 			if (Clicked == false)
 				return;
-			Debug.Log($"Clicked");
+
 			Image.sprite = HoveredSprite;
 			OnClickEvent.Invoke();
 		}
