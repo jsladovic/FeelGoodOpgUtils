@@ -7,16 +7,22 @@ namespace FeelGoodOpgUtils
 {
 	public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 	{
+		public bool Disabled;
 		private Image Image;
 		private Sprite DefaultSprite;
 		public Sprite HoveredSprite;
 		public Sprite ClickedSprite;
+
+		private Quaternion OriginalRotation;
+		public float HoveredRotation;
+		public float ClickedRotation;
 
 		public UnityEvent OnClickEvent;
 		private bool Clicked;
 
 		private void Awake()
 		{
+			OriginalRotation = transform.rotation;
 			Image = GetComponent<Image>();
 			DefaultSprite = Image.sprite;
 			Clicked = false;
@@ -24,28 +30,68 @@ namespace FeelGoodOpgUtils
 
 		public void OnPointerEnter(PointerEventData eventData)
 		{
-			Image.sprite = HoveredSprite;
+			if (Disabled == true)
+				return;
+
+			SetState(State.Hovered);
 		}
 
 		public void OnPointerExit(PointerEventData eventData)
 		{
-			Image.sprite = DefaultSprite;
+			if (Disabled == true)
+				return;
+
+			SetState(State.Default);
 			Clicked = false;
 		}
 
 		public void OnPointerDown(PointerEventData eventData)
 		{
-			Image.sprite = ClickedSprite;
+			if (Disabled == true)
+				return;
+
+			SetState(State.Clicked);
 			Clicked = true;
 		}
 
 		public void OnPointerUp(PointerEventData eventData)
 		{
+			if (Disabled == true)
+				return;
+
 			if (Clicked == false)
 				return;
 
-			Image.sprite = HoveredSprite;
+			SetState(State.Hovered);
 			OnClickEvent.Invoke();
+		}
+
+		private void SetState(State state)
+		{
+			switch (state)
+			{
+				case State.Default:
+					Image.sprite = DefaultSprite;
+					transform.rotation = OriginalRotation;
+					return;
+				case State.Hovered:
+					Image.sprite = HoveredSprite;
+					transform.rotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, HoveredRotation);
+					return;
+				case State.Clicked:
+					Image.sprite = ClickedSprite;
+					transform.rotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, ClickedRotation);
+					return;
+				default:
+					throw new UnityException($"Unknown button state {state}");
+			}
+		}
+
+		private enum State
+		{
+			Default = 0,
+			Hovered = 1,
+			Clicked = 2,
 		}
 	}
 }
