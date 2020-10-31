@@ -49,6 +49,10 @@ namespace FeelGoodOpgUtils
 		public static string[] GetAllFilesInFolder(string folderName, bool includeExtensions = false)
 		{
 			string path = Path.Combine(Application.persistentDataPath, folderName);
+			if (Directory.Exists(path) == false)
+			{
+				Directory.CreateDirectory(path);
+			}
 			string[] files = Directory.GetFiles(path);
 
 			if (includeExtensions == true)
