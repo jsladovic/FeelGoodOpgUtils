@@ -21,6 +21,9 @@ namespace FeelGoodOpgUtils
 		public static T DeserializeXml<T>(string fileName, string path)
 		{
 			string fullPath = Path.Combine(Application.persistentDataPath, path, $"{fileName}.xml");
+			if (File.Exists(fullPath) == false)
+				return default;
+
 			XmlSerializer serializer = new XmlSerializer(typeof(T));
 			StreamReader reader = new StreamReader(fullPath);
 			T deserialized = (T)serializer.Deserialize(reader.BaseStream);
