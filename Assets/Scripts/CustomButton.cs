@@ -71,15 +71,18 @@ namespace FeelGoodOpgUtils
 			switch (state)
 			{
 				case State.Default:
-					Image.sprite = DefaultSprite;
+					if (DefaultSprite != null)
+						Image.sprite = DefaultSprite;
 					transform.rotation = OriginalRotation;
 					return;
 				case State.Hovered:
-					Image.sprite = HoveredSprite;
+					if (HoveredSprite != null)
+						Image.sprite = HoveredSprite;
 					transform.rotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, HoveredRotation);
 					return;
 				case State.Clicked:
-					Image.sprite = ClickedSprite;
+					if (ClickedSprite != null)
+						Image.sprite = ClickedSprite;
 					transform.rotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, ClickedRotation);
 					return;
 				default:
