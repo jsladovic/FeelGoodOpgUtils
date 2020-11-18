@@ -7,6 +7,7 @@ namespace FeelGoodOpgUtils
 {
 	public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 	{
+		public ButtonState State { get; private set; }
 		public bool Disabled;
 		private Image Image;
 		private Sprite DefaultSprite;
@@ -22,7 +23,7 @@ namespace FeelGoodOpgUtils
 
 		private void Awake()
 		{
-			OriginalRotation = transform.rotation;
+			OriginalRotation = transform.localRotation;
 			Image = GetComponent<Image>();
 			DefaultSprite = Image.sprite;
 			Clicked = false;
@@ -33,7 +34,7 @@ namespace FeelGoodOpgUtils
 			if (Disabled == true)
 				return;
 
-			SetState(State.Hovered);
+			SetState(ButtonState.Hovered);
 		}
 
 		public void OnPointerExit(PointerEventData eventData)
@@ -41,7 +42,7 @@ namespace FeelGoodOpgUtils
 			if (Disabled == true)
 				return;
 
-			SetState(State.Default);
+			SetState(ButtonState.Default);
 			Clicked = false;
 		}
 
@@ -50,7 +51,7 @@ namespace FeelGoodOpgUtils
 			if (Disabled == true)
 				return;
 
-			SetState(State.Clicked);
+			SetState(ButtonState.Clicked);
 			Clicked = true;
 		}
 
@@ -62,39 +63,40 @@ namespace FeelGoodOpgUtils
 			if (Clicked == false)
 				return;
 
-			SetState(State.Hovered);
+			SetState(ButtonState.Hovered);
 			OnClickEvent.Invoke();
 		}
 
-		private void SetState(State state)
+		private void SetState(ButtonState state)
 		{
+			State = state;
 			switch (state)
 			{
-				case State.Default:
+				case ButtonState.Default:
 					if (DefaultSprite != null)
 						Image.sprite = DefaultSprite;
-					transform.rotation = OriginalRotation;
+					transform.localRotation = OriginalRotation;
 					return;
-				case State.Hovered:
+				case ButtonState.Hovered:
 					if (HoveredSprite != null)
 						Image.sprite = HoveredSprite;
-					transform.rotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, HoveredRotation);
+					transform.localRotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, HoveredRotation);
 					return;
-				case State.Clicked:
+				case ButtonState.Clicked:
 					if (ClickedSprite != null)
 						Image.sprite = ClickedSprite;
-					transform.rotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, ClickedRotation);
+					transform.localRotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, ClickedRotation);
 					return;
 				default:
 					throw new UnityException($"Unknown button state {state}");
 			}
 		}
+	}
 
-		private enum State
-		{
-			Default = 0,
-			Hovered = 1,
-			Clicked = 2,
-		}
+	public enum ButtonState
+	{
+		Default = 0,
+		Hovered = 1,
+		Clicked = 2,
 	}
 }
