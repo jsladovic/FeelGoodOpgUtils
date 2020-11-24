@@ -91,6 +91,12 @@ namespace FeelGoodOpgUtils
 					throw new UnityException($"Unknown button state {state}");
 			}
 		}
+
+		public void SetDefaultSprite(Sprite sprite)
+		{
+			DefaultSprite = sprite;
+			Image.sprite = sprite;
+		}
 	}
 
 	public enum ButtonState
