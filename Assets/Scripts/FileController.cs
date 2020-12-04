@@ -45,7 +45,7 @@ namespace FeelGoodOpgUtils
             string assetsPath = Path.Combine(Application.streamingAssetsPath, folderName);
             foreach (string fileName in Directory.GetFiles(assetsPath, $"*.{extension}"))
             {
-                string[] nameSplit = fileName.Split('\\');
+                string[] nameSplit = fileName.Split(Path.DirectorySeparatorChar);
                 string newPath = Path.Combine(path, nameSplit[nameSplit.Length - 1]);
                 File.Copy(fileName, newPath, true);
             }
