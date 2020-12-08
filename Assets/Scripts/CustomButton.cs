@@ -19,7 +19,7 @@ namespace FeelGoodOpgUtils
 		public float ClickedRotation;
 
 		public UnityEvent OnClickEvent;
-		private bool Clicked;
+		protected bool Clicked;
 
 		private void Awake()
 		{
@@ -55,7 +55,7 @@ namespace FeelGoodOpgUtils
 			Clicked = true;
 		}
 
-		public void OnPointerUp(PointerEventData eventData)
+		public virtual void OnPointerUp(PointerEventData eventData)
 		{
 			if (Disabled == true)
 				return;
@@ -67,7 +67,7 @@ namespace FeelGoodOpgUtils
 			OnClickEvent.Invoke();
 		}
 
-		private void SetState(ButtonState state)
+		protected void SetState(ButtonState state)
 		{
 			State = state;
 			switch (state)
