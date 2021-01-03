@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace FeelGoodOpgUtils
 {
-    public static class FileController
+	public static class FileController
     {
         public const string Xml = "xml";
 
-        public static void SerializeXml(object item, string fileName, string path)
+        public static string SerializeXml(object item, string fileName, string path)
         {
             string pathFolder = Path.Combine(Application.persistentDataPath, path);
             Directory.CreateDirectory(pathFolder);
@@ -18,6 +18,7 @@ namespace FeelGoodOpgUtils
             StreamWriter writer = new StreamWriter(fullPath);
             serializer.Serialize(writer.BaseStream, item);
             writer.Close();
+			return fullPath;
         }
 
         public static T DeserializeXml<T>(string fileName, string path)

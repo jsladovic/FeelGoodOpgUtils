@@ -10,8 +10,14 @@ namespace FeelGoodOpgUtils
 		private void Start()
 		{
 			if (CameraTransform == null)
-				CameraTransform = Camera.main.transform;
-			
+				SetCamera(Camera.main.transform);
+			else
+				SetCamera(CameraTransform);
+		}
+
+		public void SetCamera(Transform camera)
+		{
+			CameraTransform = camera;
 			OriginalRotation = transform.rotation;
 		}
 
