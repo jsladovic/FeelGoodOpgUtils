@@ -9,6 +9,7 @@ namespace FeelGoodOpgUtils
 
 		private void Start()
 		{
+			OriginalRotation = transform.rotation;
 			if (CameraTransform == null)
 				SetCamera(Camera.main.transform);
 			else
@@ -18,12 +19,11 @@ namespace FeelGoodOpgUtils
 		public void SetCamera(Transform camera)
 		{
 			CameraTransform = camera;
-			OriginalRotation = transform.rotation;
 		}
 
 		private void Update()
 		{
-			transform.LookAt(CameraTransform);
+			transform.rotation = CameraTransform.rotation * OriginalRotation;
 		}
 	}
 }
