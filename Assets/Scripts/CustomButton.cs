@@ -10,7 +10,7 @@ namespace FeelGoodOpgUtils
 		public ButtonState State { get; private set; }
 		public bool Disabled;
 
-		private Image Image;
+		[SerializeField] private Image Image;
 		private Sprite DefaultSprite;
 		[SerializeField] private Sprite HoveredSprite;
 		[SerializeField] private Sprite ClickedSprite;
@@ -25,7 +25,8 @@ namespace FeelGoodOpgUtils
 		private void Awake()
 		{
 			OriginalRotation = transform.localRotation;
-			Image = GetComponent<Image>();
+			if (Image == null)
+				Image = GetComponent<Image>();
 			DefaultSprite = Image.sprite;
 			Clicked = false;
 		}
