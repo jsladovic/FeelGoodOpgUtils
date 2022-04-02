@@ -9,14 +9,15 @@ namespace FeelGoodOpgUtils
 	{
 		public ButtonState State { get; private set; }
 		public bool Disabled;
+
 		private Image Image;
 		private Sprite DefaultSprite;
-		public Sprite HoveredSprite;
-		public Sprite ClickedSprite;
+		[SerializeField] private Sprite HoveredSprite;
+		[SerializeField] private Sprite ClickedSprite;
 
 		private Quaternion OriginalRotation;
-		public float HoveredRotation;
-		public float ClickedRotation;
+		[SerializeField] private float HoveredRotation;
+		[SerializeField] private float ClickedRotation;
 
 		public UnityEvent OnClickEvent;
 		protected bool Clicked;
