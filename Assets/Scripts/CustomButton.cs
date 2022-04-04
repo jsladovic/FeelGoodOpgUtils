@@ -69,7 +69,7 @@ namespace FeelGoodOpgUtils
 			OnClickEvent.Invoke();
 		}
 
-		protected void SetState(ButtonState state)
+		public void SetState(ButtonState state)
 		{
 			State = state;
 			switch (state)
