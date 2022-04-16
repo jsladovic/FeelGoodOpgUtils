@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -19,6 +20,9 @@ namespace FeelGoodOpgUtils
 		[SerializeField] private float HoveredRotation;
 		[SerializeField] private float ClickedRotation;
 
+		private Action<CustomButton> OnHoverCallback;
+		private Action<CustomButton> OnUnhoverCallback;
+
 		public UnityEvent OnClickEvent;
 		protected bool Clicked;
 
@@ -31,12 +35,20 @@ namespace FeelGoodOpgUtils
 			Clicked = false;
 		}
 
+		public void Initialize(Action<CustomButton> onHoverCallback, Action<CustomButton> onUnhoverCallback)
+		{
+			OnHoverCallback = onHoverCallback;
+			OnUnhoverCallback = onUnhoverCallback;
+		}
+
 		public void OnPointerEnter(PointerEventData eventData)
 		{
 			if (Disabled == true)
 				return;
 
 			SetState(ButtonState.Hovered);
+			if (OnHoverCallback != null)
+				OnHoverCallback.Invoke(this);
 		}
 
 		public void OnPointerExit(PointerEventData eventData)
@@ -46,6 +58,8 @@ namespace FeelGoodOpgUtils
 
 			SetState(ButtonState.Default);
 			Clicked = false;
+			if (OnUnhoverCallback != null)
+				OnUnhoverCallback.Invoke(this);
 		}
 
 		public void OnPointerDown(PointerEventData eventData)
