@@ -24,6 +24,7 @@ namespace FeelGoodOpgUtils
 		private Action<CustomButton> OnUnhoverCallback;
 
 		public UnityEvent OnClickEvent;
+		[SerializeField] private OnClickTarget OnClickTarget;
 		protected bool Clicked;
 
 		private void Awake()
@@ -43,7 +44,7 @@ namespace FeelGoodOpgUtils
 
 		public void OnPointerEnter(PointerEventData eventData)
 		{
-			if (Disabled == true)
+			if (CanBeClicked == false)
 				return;
 
 			SetState(ButtonState.Hovered);
@@ -53,7 +54,7 @@ namespace FeelGoodOpgUtils
 
 		public void OnPointerExit(PointerEventData eventData)
 		{
-			if (Disabled == true)
+			if (CanBeClicked == false)
 				return;
 
 			SetState(ButtonState.Default);
@@ -64,7 +65,7 @@ namespace FeelGoodOpgUtils
 
 		public void OnPointerDown(PointerEventData eventData)
 		{
-			if (Disabled == true)
+			if (CanBeClicked == false)
 				return;
 
 			SetState(ButtonState.Clicked);
@@ -73,14 +74,22 @@ namespace FeelGoodOpgUtils
 
 		public virtual void OnPointerUp(PointerEventData eventData)
 		{
-			if (Disabled == true)
+			if (CanBeClicked == false)
 				return;
 
 			if (Clicked == false)
 				return;
 
 			SetState(ButtonState.Hovered);
-			OnClickEvent.Invoke();
+			InvokeOnClickEvent();
+		}
+
+		public void InvokeOnClickEvent()
+		{
+			if (AnyOnClickEvents == true)
+				OnClickEvent.Invoke();
+			if (AnyOnClickTarget == true)
+				OnClickTarget.OnClick();
 		}
 
 		public void SetState(ButtonState state)
@@ -107,6 +116,12 @@ namespace FeelGoodOpgUtils
 					throw new UnityException($"Unknown button state {state}");
 			}
 		}
+
+		private bool AnyOnClickEvents => OnClickEvent != null && OnClickEvent.GetPersistentEventCount() > 0;
+
+		private bool AnyOnClickTarget => OnClickTarget != null && OnClickTarget.CanBeClicked() == true;
+
+		public bool CanBeClicked => Disabled == false && (AnyOnClickEvents == true || AnyOnClickTarget == true);
 
 		public void SetDefaultSprite(Sprite sprite)
 		{
