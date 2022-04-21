@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace FeelGoodOpgUtils
 {
-	public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+	public class CustomButton : InteractibleUiElement, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 	{
 		public ButtonState State { get; private set; }
 		public bool Disabled;
@@ -92,7 +92,7 @@ namespace FeelGoodOpgUtils
 				OnClickTarget.OnClick();
 		}
 
-		public void SetState(ButtonState state)
+		public override void SetState(ButtonState state)
 		{
 			State = state;
 			switch (state)
@@ -128,12 +128,5 @@ namespace FeelGoodOpgUtils
 			DefaultSprite = sprite;
 			Image.sprite = sprite;
 		}
-	}
-
-	public enum ButtonState
-	{
-		Default = 0,
-		Hovered = 1,
-		Clicked = 2,
 	}
 }
