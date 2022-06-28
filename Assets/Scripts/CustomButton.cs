@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -20,6 +21,12 @@ namespace FeelGoodOpgUtils
 		[SerializeField] private float HoveredRotation;
 		[SerializeField] private float ClickedRotation;
 
+		[SerializeField] private bool UseColorTransition;
+		private Color DefaultColor;
+		[ShowIf(nameof(UseColorTransition))] [SerializeField] private Color HoveredColor;
+		[ShowIf(nameof(UseColorTransition))] [SerializeField] private Color ClickedColor;
+
+
 		private Action<CustomButton> OnHoverCallback;
 		private Action<CustomButton> OnUnhoverCallback;
 
@@ -33,6 +40,7 @@ namespace FeelGoodOpgUtils
 			if (Image == null)
 				Image = GetComponent<Image>();
 			DefaultSprite = Image.sprite;
+			DefaultColor = Image.color;
 			Clicked = false;
 		}
 
@@ -100,16 +108,22 @@ namespace FeelGoodOpgUtils
 				case ButtonState.Default:
 					if (DefaultSprite != null)
 						Image.sprite = DefaultSprite;
+					if (UseColorTransition == true)
+						Image.color = DefaultColor;
 					transform.localRotation = OriginalRotation;
 					return;
 				case ButtonState.Hovered:
 					if (HoveredSprite != null)
 						Image.sprite = HoveredSprite;
+					if (UseColorTransition == true)
+						Image.color = HoveredColor;
 					transform.localRotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, HoveredRotation);
 					return;
 				case ButtonState.Clicked:
 					if (ClickedSprite != null)
 						Image.sprite = ClickedSprite;
+					if (UseColorTransition == true)
+						Image.color = ClickedColor;
 					transform.localRotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, ClickedRotation);
 					return;
 				default:
