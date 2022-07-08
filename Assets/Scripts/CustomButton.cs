@@ -9,7 +9,6 @@ namespace FeelGoodOpgUtils
 {
 	public class CustomButton : InteractibleUiElement, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 	{
-		public ButtonState State { get; private set; }
 		public bool Disabled;
 
 		[SerializeField] private Image Image;

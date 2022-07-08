@@ -4,6 +4,8 @@ namespace FeelGoodOpgUtils
 {
 	public abstract class InteractibleUiElement : MonoBehaviour
 	{
+		public ButtonState State { get; protected set; }
+
 		public abstract void SetState(ButtonState state);
 	}
 
