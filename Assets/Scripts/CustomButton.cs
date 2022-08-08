@@ -25,6 +25,11 @@ namespace FeelGoodOpgUtils
 		[ShowIf(nameof(UseColorTransition))] [SerializeField] private Color HoveredColor;
 		[ShowIf(nameof(UseColorTransition))] [SerializeField] private Color ClickedColor;
 
+		[SerializeField] private bool UseScalingTransition;
+		private Vector3 OriginalScale;
+		[ShowIf(nameof(UseScalingTransition))] [SerializeField] private Vector3 HoveredScale;
+		[ShowIf(nameof(UseScalingTransition))] [SerializeField] private Vector3 ClickedScale;
+
 
 		private Action<CustomButton> OnHoverCallback;
 		private Action<CustomButton> OnUnhoverCallback;
@@ -40,6 +45,7 @@ namespace FeelGoodOpgUtils
 				Image = GetComponent<Image>();
 			DefaultSprite = Image.sprite;
 			DefaultColor = Image.color;
+			OriginalScale = Image.transform.localScale;
 			Clicked = false;
 		}
 
@@ -109,6 +115,8 @@ namespace FeelGoodOpgUtils
 						Image.sprite = DefaultSprite;
 					if (UseColorTransition == true)
 						Image.color = DefaultColor;
+					if (UseScalingTransition == true)
+						Image.transform.localScale = OriginalScale;
 					transform.localRotation = OriginalRotation;
 					return;
 				case ButtonState.Hovered:
@@ -116,6 +124,8 @@ namespace FeelGoodOpgUtils
 						Image.sprite = HoveredSprite;
 					if (UseColorTransition == true)
 						Image.color = HoveredColor;
+					if (UseScalingTransition == true)
+						Image.transform.localScale = HoveredScale;
 					transform.localRotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, HoveredRotation);
 					return;
 				case ButtonState.Clicked:
@@ -123,6 +133,8 @@ namespace FeelGoodOpgUtils
 						Image.sprite = ClickedSprite;
 					if (UseColorTransition == true)
 						Image.color = ClickedColor;
+					if (UseScalingTransition == true)
+						Image.transform.localScale = ClickedScale;
 					transform.localRotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, ClickedRotation);
 					return;
 				default:
