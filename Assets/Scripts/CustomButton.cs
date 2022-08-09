@@ -27,9 +27,9 @@ namespace FeelGoodOpgUtils
 
 		[SerializeField] private bool UseScalingTransition;
 		private Vector3 OriginalScale;
+		[ShowIf(nameof(UseScalingTransition))] [SerializeField] private bool TweenWhenScaling;
 		[ShowIf(nameof(UseScalingTransition))] [SerializeField] private Vector3 HoveredScale;
 		[ShowIf(nameof(UseScalingTransition))] [SerializeField] private Vector3 ClickedScale;
-
 
 		private Action<CustomButton> OnHoverCallback;
 		private Action<CustomButton> OnUnhoverCallback;
@@ -37,6 +37,8 @@ namespace FeelGoodOpgUtils
 		public UnityEvent OnClickEvent;
 		[SerializeField] private OnClickTarget OnClickTarget;
 		protected bool Clicked;
+
+		private const float TweenScaleTime = 0.25f;
 
 		private void Awake()
 		{
@@ -116,7 +118,7 @@ namespace FeelGoodOpgUtils
 					if (UseColorTransition == true)
 						Image.color = DefaultColor;
 					if (UseScalingTransition == true)
-						Image.transform.localScale = OriginalScale;
+						ScaleImageToSize(OriginalScale);
 					transform.localRotation = OriginalRotation;
 					return;
 				case ButtonState.Hovered:
@@ -125,7 +127,7 @@ namespace FeelGoodOpgUtils
 					if (UseColorTransition == true)
 						Image.color = HoveredColor;
 					if (UseScalingTransition == true)
-						Image.transform.localScale = HoveredScale;
+						ScaleImageToSize(HoveredScale);
 					transform.localRotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, HoveredRotation);
 					return;
 				case ButtonState.Clicked:
@@ -134,12 +136,20 @@ namespace FeelGoodOpgUtils
 					if (UseColorTransition == true)
 						Image.color = ClickedColor;
 					if (UseScalingTransition == true)
-						Image.transform.localScale = ClickedScale;
+						ScaleImageToSize(ClickedScale);
 					transform.localRotation = OriginalRotation * Quaternion.Euler(0.0f, 0.0f, ClickedRotation);
 					return;
 				default:
 					throw new UnityException($"Unknown button state {state}");
 			}
+		}
+
+		private void ScaleImageToSize(Vector3 scale)
+		{
+			if (TweenWhenScaling == true)
+				LeanTween.scale(Image.gameObject, scale, TweenScaleTime);
+			else
+				Image.transform.localScale = scale;
 		}
 
 		private bool AnyOnClickEvents => OnClickEvent != null && OnClickEvent.GetPersistentEventCount() > 0;
