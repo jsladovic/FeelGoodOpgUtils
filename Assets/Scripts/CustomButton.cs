@@ -28,6 +28,7 @@ namespace FeelGoodOpgUtils
 		[SerializeField] private bool UseScalingTransition;
 		private Vector3 OriginalScale;
 		[ShowIf(nameof(UseScalingTransition))] [SerializeField] private bool TweenWhenScaling;
+		[ShowIf(nameof(TweenWhenScaling))] [SerializeField] private float TweenScaleTime = 0.1f;
 		[ShowIf(nameof(UseScalingTransition))] [SerializeField] private Vector3 HoveredScale;
 		[ShowIf(nameof(UseScalingTransition))] [SerializeField] private Vector3 ClickedScale;
 
@@ -38,7 +39,6 @@ namespace FeelGoodOpgUtils
 		[SerializeField] private OnClickTarget OnClickTarget;
 		protected bool Clicked;
 
-		private const float TweenScaleTime = 0.25f;
 
 		private void Awake()
 		{
