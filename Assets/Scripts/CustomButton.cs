@@ -144,6 +144,12 @@ namespace FeelGoodOpgUtils
 			}
 		}
 
+		public void OverrideDefaultSprite(Sprite sprite)
+		{
+			DefaultSprite = sprite;
+			Image.sprite = sprite;
+		}
+
 		private void ScaleImageToSize(Vector3 scale)
 		{
 			if (TweenWhenScaling == true)
@@ -157,6 +163,8 @@ namespace FeelGoodOpgUtils
 		private bool AnyOnClickTarget => OnClickTarget != null && OnClickTarget.CanBeClicked() == true;
 
 		public bool CanBeClicked => Disabled == false && (AnyOnClickEvents == true || AnyOnClickTarget == true);
+
+		public AspectRatioFitter AspectRatioFitter => Image.GetComponent<AspectRatioFitter>();
 
 		public void SetDefaultSprite(Sprite sprite)
 		{
